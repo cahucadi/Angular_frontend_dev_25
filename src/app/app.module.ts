@@ -9,7 +9,12 @@ import { StudentListComponent } from './student/student-list/student-list.compon
 import { StudentFormComponent } from './student/student-form/student-form.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { HomeComponent } from './shared/home/home.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { DashboardComponent } from './shared/dashboard/dashboard.component';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { AuthInterceptor } from './auth/guards/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -17,7 +22,10 @@ import { HttpClientModule } from '@angular/common/http';
     StudentListComponent,
     StudentFormComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +33,15 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+      
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
